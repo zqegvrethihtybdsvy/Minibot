@@ -1,0 +1,4 @@
+sudo nmcli connection delete "LeSeigneurdesAnneaux"
+sudo nmcli dev wifi connect "LeSeigneurdesAnneaux" password "Frodon&sonPrecieuxversM0rdor"
+sudo nmcli connection modify "LeSeigneurdesAnneaux" ipv4.dns "8.8.8.8 1.1.1.1" ipv4.ignore-auto-dns yes
+sudo nmcli connection up "LeSeigneurdesAnneaux"
