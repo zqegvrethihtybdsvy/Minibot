@@ -1,4 +1,5 @@
 import smbus
+import time
 
 bus = smbus.SMBus(1)
 
@@ -15,5 +16,6 @@ def set_led(state: bool):
     bus.write_byte(LED_ADDRESS, cmd)
 
 if __name__ == "__main__":
-    #set_led(True)   # Turns LED ON
+    set_led(True)   # Turns LED ON
+    time.sleep(1)
     set_led(False) # Turns LED OFF
