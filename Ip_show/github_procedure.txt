@@ -1,0 +1,7 @@
+cd /home/student
+git switch Florian
+git add -A -- Ip_show
+git diff --cached --check
+git diff --cached
+git commit -m "Update Ip_show"
+git push origin Florian

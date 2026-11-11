@@ -11,7 +11,7 @@ BAUDRATE = 115200
 def connect_lidar(retries=3):
     lidar = RPLidar(PORT_NAME, baudrate=BAUDRATE, timeout=3)
     lidar.stop()          # coupe un scan éventuellement resté actif
-    lidar.clean_input()   # vide le buffer, sans rouvrir le port
+    lidar.clear_input()   # vide le buffer, sans rouvrir le port
     for _ in range(retries):
         try:
             print(f"[LiDAR] Info : {lidar.get_info()}")
@@ -20,7 +20,7 @@ def connect_lidar(retries=3):
             print(f"[WARN] get_info a échoué ({e}), reset...")
             lidar.reset()
             time.sleep(2.0)
-            lidar.clean_input()
+            lidar.clear_input()
     raise RuntimeError("Le lidar ne répond pas")
 
 def zone_distance(scan, lo, hi):
