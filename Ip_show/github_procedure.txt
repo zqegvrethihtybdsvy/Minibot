@@ -1,3 +1,5 @@
+git config --global user.name zqegvrethihtybdsvy
+git config --global user.email florian.marcelis@student.uclouvain.be
 cd /home/student
 git switch Florian
 git add Ip_show
@@ -6,4 +8,5 @@ git diff --cached
 git commit -m "Update Ip_show"
 git push origin Florian
 
-ping -c 2 github.com   
+unset GIT_ASKPASS
+ping -c 2 github.com
