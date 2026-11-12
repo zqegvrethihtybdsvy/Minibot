@@ -8,5 +8,4 @@ git diff --cached
 git commit -m "Update Ip_show"
 git push origin Florian
 
-unset GIT_ASKPASS
 ping -c 2 github.com
