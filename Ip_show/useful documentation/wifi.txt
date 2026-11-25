@@ -21,6 +21,8 @@ sudo nmcli radio wifi on
 sudo nmcli dev set wlan0 managed yes
 sleep 3
 sudo nmcli dev wifi rescan
+echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
+
 --------------------------------------------------------------------------------
 1. CLIENT WI-FI: LeSeigneurdesAnneaux
 --------------------------------------------------------------------------------
@@ -51,14 +53,21 @@ ping -c 2 8.8.8.8
 # Do NOT use 'nmcli dev wifi connect' for Corneille-wifi (the Pi hosts it).
 # Instead, release wlan0 from NetworkManager and start hostapd + dnsmasq:
 
-sudo nmcli connection delete "Corneille-wifi" 2>/dev/null
+--------------------------------------------------------------------------------
+3. MINIBOT ACCESS POINT: Corneille-wifi (IP: 10.3.141.1 | Pass: croacroa)
+--------------------------------------------------------------------------------
+sudo nmcli dev disconnect wlan0 2>/dev/null
 sudo nmcli dev set wlan0 managed no
+sudo dhcpcd -k wlan0 2>/dev/null
 sudo rfkill unblock wifi
 sudo ip link set wlan0 up
 sudo ip addr flush dev wlan0
 sudo ip addr add 10.3.141.1/24 dev wlan0
 sudo systemctl unmask hostapd
 sudo systemctl restart hostapd dnsmasq
+
+# Verify Access Point is active (look for "active (running)"):
+sudo systemctl status hostapd --no-pager -l
 
 # Verify Access Point is active (look for "active (running)"):
 sudo systemctl status hostapd --no-pager -l
