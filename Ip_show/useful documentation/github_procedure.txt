@@ -1,0 +1,43 @@
+================================================================================
+AIDE-MÉMOIRE GIT (MINIBOT - BRANCHE FLORIAN)
+================================================================================
+
+--------------------------------------------------------------------------------
+0. VÉRIFIER LA CONNEXION INTERNET / GITHUB
+--------------------------------------------------------------------------------
+# Note : Nécessite que le Pi soit connecté à un Wi-Fi avec accès Internet
+# (ex. OnePlus Nord 2T 5G ou LeSeigneurdesAnneaux, et non Corneille-wifi).
+ping -c 2 github.com
+
+--------------------------------------------------------------------------------
+1. CONFIGURATION GIT (À exécuter une seule fois sur le Raspberry Pi)
+--------------------------------------------------------------------------------
+git config --global user.name "zqegvrethihtybdsvy"
+git config --global user.email "florian.marcelis@student.uclouvain.be"
+
+--------------------------------------------------------------------------------
+2. SE PLACER DANS LE DÉPÔT ET SUR LA BONNE BRANCHE
+--------------------------------------------------------------------------------
+cd /home/student
+git switch Florian
+
+--------------------------------------------------------------------------------
+3. VÉRIFIER ET PRÉPARER LES MODIFICATIONS (STAGING)
+--------------------------------------------------------------------------------
+# Voir l'état des fichiers modifiés ou non suivis :
+git status
+
+# Ajouter le dossier Ip_show :
+git add Ip_show
+
+# Vérifier l'absence d'erreurs d'espaces ou de conflits avant le commit :
+git diff --cached --check
+
+# Relire le détail exact des modifications prêtes à être enregistrées :
+git diff --cached
+
+--------------------------------------------------------------------------------
+4. ENREGISTRER (COMMIT) ET ENVOYER SUR GITHUB (PUSH)
+--------------------------------------------------------------------------------
+git commit -m "Update Ip_show"
+git push origin Florian

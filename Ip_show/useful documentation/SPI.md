@@ -48,6 +48,46 @@ The first byte dictates whether the transaction is a **Read** or a **Write**, an
 
 * To **Write** to Address `0x10`: Byte 1 = `0x10 | 0x80 = 0x90` (Binary: `1001 0000`)
 
+
+### 2.3 SPI Communication Mode
+
+The communication between the Raspberry Pi (SPI Master) and the DE0-Nano (SPI Slave) uses **SPI Mode 0**.
+
+SPI defines four different communication modes, determined by two parameters:
+
+- **CPOL (Clock Polarity):** Defines the idle state of the SPI clock (SCK).
+- **CPHA (Clock Phase):** Defines which clock edge is used to sample incoming data.
+
+For this implementation, the configuration is:
+
+| Parameter | Value | Description |
+|---|---|---|
+| SPI Mode | `0` | Communication mode |
+| CPOL | `0` | Clock is LOW when idle |
+| CPHA | `0` | Data is sampled on the first clock edge |
+| Sampling Edge | Rising edge | Data is read on the LOW-to-HIGH transition |
+| Data Change Edge | Falling edge | Data changes on the HIGH-to-LOW transition |
+| Bit Order | MSB First | Most Significant Bit is transmitted first |
+
+**SPI Mode 0 Timing:**
+
+1. The clock (`SCK`) remains LOW when no communication is taking place.
+2. When communication starts, the first clock transition is a rising edge (LOW to HIGH).
+3. The receiver samples the data (`MOSI` or `MISO`) on this rising edge.
+4. The data changes on the falling edge (HIGH to LOW), preparing the next bit for sampling.
+
+This ensures that the data is stable when it is sampled by the receiving device.
+
+**SPI Mode Comparison:**
+
+| Mode | CPOL | CPHA | Sampling Edge |
+|---|---|---|---|
+| Mode 0 | `0` | `0` | Rising |
+| Mode 1 | `0` | `1` | Falling |
+| Mode 2 | `1` | `0` | Falling |
+| Mode 3 | `1` | `1` | Rising |
+
+
 ## 3. Register Address Map
 
 The default program flashed to the DE0-Nano exposes several registers for interacting with the robot's hardware sensors (like odometers and encoders).

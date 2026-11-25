@@ -1,0 +1,67 @@
+================================================================================
+MINIBOT WI-FI & ACCESS POINT SWITCHING CHEAT SHEET
+================================================================================
+Note: Because Corneille-wifi puts wlan0 into "unmanaged" mode (for hostapd),
+always run the "STOP ACCESS POINT" block before connecting to a client Wi-Fi
+(LeSeigneurdesAnneaux or OnePlus Nord 2T 5G).
+
+--------------------------------------------------------------------------------
+0. STOP ACCESS POINT (Run this FIRST before switching to a client Wi-Fi)
+--------------------------------------------------------------------------------
+sudo rm -f /etc/NetworkManager/conf.d/99-unmanaged-wlan0.conf
+sudo systemctl stop hostapd dnsmasq
+sudo dhcpcd -k wlan0 2>/dev/null
+sudo rfkill unblock wifi
+sudo ip link set wlan0 up
+sudo ip addr flush dev wlan0
+sudo ip route del default via 10.3.141.1 2>/dev/null
+sudo systemctl restart NetworkManager wpa_supplicant
+sleep 2
+sudo nmcli radio wifi on
+sudo nmcli dev set wlan0 managed yes
+sleep 3
+sudo nmcli dev wifi rescan
+--------------------------------------------------------------------------------
+1. CLIENT WI-FI: LeSeigneurdesAnneaux
+--------------------------------------------------------------------------------
+sudo nmcli connection delete "LeSeigneurdesAnneaux" 2>/dev/null
+sudo nmcli dev wifi connect "LeSeigneurdesAnneaux" password "Frodon&sonPrecieuxversM0rdor"
+sudo nmcli connection modify "LeSeigneurdesAnneaux" ipv4.dns "8.8.8.8 1.1.1.1" ipv4.ignore-auto-dns yes
+sudo nmcli connection up "LeSeigneurdesAnneaux"
+
+# Check assigned IP & internet connectivity:
+ip -4 addr show wlan0 | grep "inet "
+ping -c 2 8.8.8.8
+
+--------------------------------------------------------------------------------
+2. CLIENT WI-FI: OnePlus Nord 2T 5G (4G Hotspot)
+--------------------------------------------------------------------------------
+sudo nmcli connection delete "OnePlus Nord 2T 5G" 2>/dev/null
+sudo nmcli dev wifi connect "OnePlus Nord 2T 5G" password "ABUNDALAKAKA"
+sudo nmcli connection modify "OnePlus Nord 2T 5G" ipv4.dns "8.8.8.8 1.1.1.1" ipv4.ignore-auto-dns yes
+sudo nmcli connection up "OnePlus Nord 2T 5G"
+
+# Check assigned IP & internet connectivity:
+ip -4 addr show wlan0 | grep "inet "
+ping -c 2 8.8.8.8
+
+--------------------------------------------------------------------------------
+3. MINIBOT ACCESS POINT: Corneille-wifi (IP: 10.3.141.1 | Pass: croacroa)
+--------------------------------------------------------------------------------
+# Do NOT use 'nmcli dev wifi connect' for Corneille-wifi (the Pi hosts it).
+# Instead, release wlan0 from NetworkManager and start hostapd + dnsmasq:
+
+sudo nmcli connection delete "Corneille-wifi" 2>/dev/null
+sudo nmcli dev set wlan0 managed no
+sudo rfkill unblock wifi
+sudo ip link set wlan0 up
+sudo ip addr flush dev wlan0
+sudo ip addr add 10.3.141.1/24 dev wlan0
+sudo systemctl unmask hostapd
+sudo systemctl restart hostapd dnsmasq
+
+# Verify Access Point is active (look for "active (running)"):
+sudo systemctl status hostapd --no-pager -l
+
+# Connect from Windows laptop to SSID "Corneille-wifi" (password: croacroa)
+# Then SSH / VS Code Remote-SSH to: student@10.3.141.1

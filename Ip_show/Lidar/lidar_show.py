@@ -53,7 +53,7 @@ def run_lidar():
         print(f"{'Angle 0° (Avt)':<15} | {'Angle 90° (Drte)':<15} | {'Nb Points':<10}")
         print("-" * 50)
 
-        for scan in lidar.iter_scans(max_buf_meas=500):
+        for scan in lidar.iter_scans(max_buf_meas=2000):
             front_dist = "---"
             right_dist = "---"
             
